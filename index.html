@@ -1,0 +1,389 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Всей семьёй — прототип</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: a planner that reads like a family's weekend sketchbook — watercolour washes behind, hand-lettered heads, one working tool in the middle. */
+:root{
+  --paper:#FFF8F1; --paper-2:#FFFFFF; --ink:#2E2A28; --ink-2:#6B5B52;
+  --clay:#B4532A; --clay-soft:#F6D9C6; --line:#EADBCF;
+  --wash-peach:#FFC9A8; --wash-sky:#B9DDF5; --wash-lilac:#D9CCF2; --wash-mint:#C6EBD3; --wash-sun:#FFE7A3;
+  --ok:#2F7A4F; --ok-soft:#E1F3E8; --shadow:rgba(120,70,40,.10);
+  --f-hand:"Comfortaa","Nunito","Segoe UI",sans-serif;
+  --f-body:"Nunito","Segoe UI",system-ui,sans-serif;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#1F1A17; --paper-2:#2A2420; --ink:#F4EAE1; --ink-2:#C9B8AB;
+  --clay:#F2A27A; --clay-soft:#4A2F22; --line:#3D332D;
+  --wash-peach:#7A3F22; --wash-sky:#1F4A66; --wash-lilac:#3F3466; --wash-mint:#1F5238; --wash-sun:#6B5418;
+  --ok:#8FD8AA; --ok-soft:#1E3A2A; --shadow:rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#1F1A17; --paper-2:#2A2420; --ink:#F4EAE1; --ink-2:#C9B8AB;
+  --clay:#F2A27A; --clay-soft:#4A2F22; --line:#3D332D;
+  --wash-peach:#7A3F22; --wash-sky:#1F4A66; --wash-lilac:#3F3466; --wash-mint:#1F5238; --wash-sun:#6B5418;
+  --ok:#8FD8AA; --ok-soft:#1E3A2A; --shadow:rgba(0,0,0,.35); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow-x:hidden}
+h1,h2,h3{font-family:var(--f-hand);font-weight:700;line-height:1.15;letter-spacing:-.01em;text-wrap:balance;margin:0}
+a{color:var(--clay)}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--clay);outline-offset:2px;border-radius:10px}
+
+/* watercolour washes */
+.washes{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.wash{position:absolute;border-radius:50%;filter:blur(48px);opacity:.55;mix-blend-mode:multiply}
+:root[data-theme="dark"] .wash{mix-blend-mode:screen;opacity:.45}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wash{mix-blend-mode:screen;opacity:.45}}
+.w1{width:46vmax;height:38vmax;left:-12vmax;top:-10vmax;background:var(--wash-peach);animation:drift1 26s ease-in-out infinite alternate}
+.w2{width:40vmax;height:36vmax;right:-14vmax;top:8vmax;background:var(--wash-sky);animation:drift2 31s ease-in-out infinite alternate}
+.w3{width:34vmax;height:30vmax;left:20vmax;bottom:-14vmax;background:var(--wash-lilac);animation:drift3 29s ease-in-out infinite alternate}
+.w4{width:22vmax;height:20vmax;right:18vmax;bottom:6vmax;background:var(--wash-mint);animation:drift1 34s ease-in-out infinite alternate-reverse}
+.grain{position:absolute;inset:0;opacity:.18;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .35 0 0 0 0 .25 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+@keyframes drift1{to{transform:translate(6vmax,4vmax) scale(1.12) rotate(8deg)}}
+@keyframes drift2{to{transform:translate(-7vmax,6vmax) scale(.92) rotate(-10deg)}}
+@keyframes drift3{to{transform:translate(5vmax,-6vmax) scale(1.08) rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.wash{animation:none}}
+
+.wrap{max-width:1120px;margin:0 auto}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:18px 8px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo-mark{width:44px;height:44px}
+.logo b{font-family:var(--f-hand);font-weight:700;font-size:26px;letter-spacing:.2px}
+.logo small{display:block;font-size:12px;color:var(--ink-2);margin-top:-4px}
+nav.top-nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+nav.top-nav a{padding:8px 12px;border-radius:999px;text-decoration:none;color:var(--ink);font-weight:600;font-size:14px}
+nav.top-nav a:hover{background:var(--clay-soft)}
+.city{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1.5px dashed var(--line);border-radius:999px;font-size:14px;font-weight:600;background:color-mix(in srgb,var(--paper-2) 70%,transparent)}
+
+.hero{padding-block:28px 12px;display:grid;gap:10px;max-width:760px}
+.hero h1{font-size:clamp(32px,5.4vw,54px)}
+.hero h1 em{font-style:normal;color:var(--clay)}
+.hero p{margin:0;font-size:clamp(16px,2.1vw,19px);color:var(--ink-2);max-width:60ch}
+
+/* planner */
+.planner{margin-top:18px;background:color-mix(in srgb,var(--paper-2) 88%,transparent);border:1.5px solid var(--line);border-radius:28px;padding:20px;display:grid;gap:16px;box-shadow:0 10px 30px var(--shadow);backdrop-filter:blur(6px)}
+.prow{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:start}
+.plabel{font-family:var(--f-hand);font-weight:700;font-size:18px;padding-top:4px}
+.plabel span{display:block;font-family:var(--f-body);font-size:12px;color:var(--ink-2);line-height:1.3}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--paper-2);border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:transform .15s,background .15s,border-color .15s}
+.chip:hover{transform:translateY(-1px);border-color:var(--clay)}
+.chip[aria-pressed="true"]{background:var(--clay);border-color:var(--clay);color:var(--paper)}
+.chip .dot{width:10px;height:10px;border-radius:50%}
+.search{display:flex;gap:8px}
+.search input{flex:1;min-width:0;border:1.5px solid var(--line);background:var(--paper-2);border-radius:14px;padding:10px 14px}
+.hint{font-size:13px;color:var(--ink-2);margin:0}
+
+/* results */
+.results-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:34px 0 14px}
+.results-head h2{font-size:clamp(28px,4vw,38px)}
+.results-head p{margin:0;color:var(--ink-2);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.card{background:var(--paper-2);border:1.5px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .2s,box-shadow .2s;text-align:left;padding:0}
+.card:hover{transform:translateY(-4px) rotate(-.3deg);box-shadow:0 14px 28px var(--shadow)}
+.card-top{position:relative;padding:18px 16px 14px;min-height:118px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;overflow:hidden}
+.card-top .blot{position:absolute;inset:-30% -20% auto auto;width:190px;height:150px;border-radius:46% 54% 60% 40%/50% 42% 58% 50%;filter:blur(6px);opacity:.75}
+.card-top .blot.b2{inset:auto auto -40% -18%;width:150px;height:120px;opacity:.5}
+.cat{position:relative;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.card h3{position:relative;font-size:22px}
+.card-body{padding:4px 16px 16px;display:grid;gap:10px;flex:1}
+.agebar{display:grid;gap:4px}
+.agebar .track{position:relative;height:10px;border-radius:999px;background:var(--line)}
+.agebar .fill{position:absolute;top:0;bottom:0;border-radius:999px;background:var(--clay)}
+.agebar .kid{position:absolute;top:-4px;width:4px;height:18px;border-radius:2px;background:var(--ink)}
+.agebar .scale{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.badge{font-size:12px;font-weight:700;padding:4px 9px;border-radius:999px;background:var(--clay-soft);color:var(--ink)}
+.badge.pk{background:var(--wash-lilac)}
+.badge.gen{background:var(--wash-sun)}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.badge.acc{background:var(--wash-sky)}
+.card-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;border-top:1.5px dashed var(--line);padding-top:10px;margin-top:auto}
+.card-foot b{font-weight:800}
+.card-foot span{color:var(--clay);font-weight:800}
+.empty{grid-column:1/-1;text-align:center;padding:40px 16px;border:1.5px dashed var(--line);border-radius:var(--r);background:var(--paper-2)}
+.empty h3{font-size:28px}
+
+/* sections */
+section.band{margin-top:64px}
+section.band>h2{font-size:clamp(30px,4.6vw,44px);margin-bottom:16px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;counter-reset:s}
+.step{padding:18px;border-radius:var(--r);background:color-mix(in srgb,var(--paper-2) 80%,transparent);border:1.5px solid var(--line);display:grid;gap:6px}
+.step::before{counter-increment:s;content:counter(s);font-family:var(--f-hand);font-size:34px;color:var(--clay);line-height:1}
+.step h3{font-size:20px}
+.step p{margin:0;color:var(--ink-2);font-size:15px}
+.partners{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:start;padding:24px;border-radius:28px;background:color-mix(in srgb,var(--paper-2) 85%,transparent);border:1.5px solid var(--line)}
+.partners h2{font-size:clamp(30px,4.6vw,44px)}
+.partners p{color:var(--ink-2);margin:8px 0 0}
+.partners ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.partners li{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}
+.partners li svg{width:28px;height:28px;color:var(--ok)}
+.partners li b{display:block}
+.partners li span{color:var(--ink-2);font-size:14px}
+footer{margin-top:56px;padding-block:22px 34px;border-top:1.5px dashed var(--line);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;color:var(--ink-2);font-size:13px}
+
+/* day plan dialog */
+dialog{border:none;padding:0;border-radius:26px;max-width:620px;width:calc(100% - 32px);background:var(--paper-2);color:var(--ink);box-shadow:0 30px 70px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(40,25,15,.45);backdrop-filter:blur(3px)}
+.dlg-head{position:relative;padding:22px 22px 16px;overflow:hidden}
+.dlg-head h2{position:relative;font-size:28px;padding-right:44px}
+.dlg-head p{position:relative;margin:6px 0 0;color:var(--ink-2)}
+.x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper-2);cursor:pointer;font-size:20px;line-height:1;z-index:2}
+.dlg-body{padding:4px 22px 22px;display:grid;gap:4px}
+.leg{display:grid;grid-template-columns:44px 1fr;gap:12px;position:relative;padding-bottom:16px}
+.leg:not(:last-child)::after{content:"";position:absolute;left:21px;top:44px;bottom:0;border-left:2px dashed var(--line)}
+.leg-ico{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--clay-soft)}
+.leg-ico svg{width:24px;height:24px}
+.leg h3{font-size:20px}
+.leg .time{font-size:13px;color:var(--ink-2);font-weight:700}
+.checks{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:4px;font-size:15px}
+.checks li{display:flex;gap:8px;align-items:flex-start}
+.checks li::before{content:"✓";color:var(--ok);font-weight:800}
+.checks li.no::before{content:"–";color:var(--ink-2)}
+.cafes{display:grid;gap:8px;margin-top:8px}
+.cafe{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;border:1.5px solid var(--line);font-size:14px}
+.cafe b{display:block}
+.cafe small{color:var(--ink-2)}
+.cafe .min{white-space:nowrap;font-weight:800;color:var(--clay)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:14px;font-weight:800;text-decoration:none;border:1.5px solid var(--clay)}
+.btn.primary{background:var(--clay);color:var(--paper)}
+.btn.ghost{color:var(--clay);background:transparent}
+.verified{font-size:12px;color:var(--ok);font-weight:700}
+
+@media (max-width:720px){
+  .prow{grid-template-columns:1fr;gap:6px}
+  .partners{grid-template-columns:1fr}
+  nav.top-nav a.hide-sm{display:none}
+}
+</style>
+</head><body>
+
+<div class="washes" aria-hidden="true"><div class="wash w1"></div><div class="wash w2"></div><div class="wash w3"></div><div class="wash w4"></div><div class="grain"></div></div>
+
+<div class="wrap">
+<header class="top">
+  <a class="logo" href="#top" aria-label="Всей семьёй">
+    <svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true">
+      <circle cx="15" cy="26" r="11" fill="var(--wash-peach)"/><circle cx="31" cy="24" r="12" fill="var(--wash-sky)" opacity=".85"/><circle cx="24" cy="35" r="8" fill="var(--wash-sun)" opacity=".9"/>
+      <circle cx="15" cy="13" r="4.5" fill="var(--clay)"/><circle cx="31" cy="10" r="5" fill="var(--clay)"/><circle cx="24" cy="23" r="3.5" fill="var(--clay)"/>
+    </svg>
+    <span><b>Всей семьёй</b><small>культурный маршрут выходного дня</small></span>
+  </a>
+  <nav class="top-nav" aria-label="Разделы">
+    <a class="hide-sm" href="#how">Как это работает</a>
+    <a href="#partners">Площадкам</a>
+    <span class="city" title="Другие города — в планах">Санкт-Петербург</span>
+  </nav>
+</header>
+
+<main id="top">
+<section class="hero">
+  <h1>Куда пойти <em>всей семьёй</em> в выходной?</h1>
+  <p>Отметьте, кто идёт, — и мы подберём музей, спектакль или семейную программу, которые подойдут и малышу, и школьнику, и бабушке. С проверенными условиями, местом, где поесть рядом, и дорогой.</p>
+</section>
+
+<form class="planner" id="planner" aria-label="Подбор места" onsubmit="return false">
+  <div class="prow">
+    <div class="plabel">Кто идёт<span>отметьте всех детей</span></div>
+    <div class="chips" id="ages">
+      <button type="button" class="chip" data-age="0" aria-pressed="true"><span class="dot" style="background:var(--wash-peach)"></span>Малыш до 3 лет</button>
+      <button type="button" class="chip" data-age="1" aria-pressed="false"><span class="dot" style="background:var(--wash-sun)"></span>3–6 лет</button>
+      <button type="button" class="chip" data-age="2" aria-pressed="true"><span class="dot" style="background:var(--wash-mint)"></span>7–9 лет</button>
+      <button type="button" class="chip" data-age="3" aria-pressed="false"><span class="dot" style="background:var(--wash-sky)"></span>10–14 лет</button>
+    </div>
+  </div>
+  <div class="prow">
+    <div class="plabel">Что важно<span>условия для семьи</span></div>
+    <div class="chips" id="needs">
+      <button type="button" class="chip" data-need="gen" aria-pressed="false">С бабушкой и дедушкой</button>
+      <button type="button" class="chip" data-need="stroller" aria-pressed="true">Берём коляску</button>
+      <button type="button" class="chip" data-need="large" aria-pressed="false">Льготы многодетным</button>
+      <button type="button" class="chip" data-need="pushkin" aria-pressed="false">«Пушкинская карта»</button>
+      <button type="button" class="chip" data-need="acc" aria-pressed="false">Доступная среда для детей с ОВЗ</button>
+    </div>
+  </div>
+  <div class="prow">
+    <div class="plabel">Куда</div>
+    <div class="chips" id="cats">
+      <button type="button" class="chip" data-cat="all" aria-pressed="true">Всё</button>
+      <button type="button" class="chip" data-cat="museum" aria-pressed="false">Музеи</button>
+      <button type="button" class="chip" data-cat="theatre" aria-pressed="false">Театры</button>
+      <button type="button" class="chip" data-cat="program" aria-pressed="false">Семейные программы</button>
+    </div>
+  </div>
+  <div class="prow">
+    <div class="plabel">Поиск</div>
+    <div class="search"><input id="q" type="search" placeholder="Например: динозавры, куклы, поезда" aria-label="Поиск по названию и описанию"></div>
+  </div>
+  <p class="hint">Прототип: места реальные, а цены, условия и кафе — примерные, для демонстрации.</p>
+</form>
+
+<div class="results-head">
+  <h2 id="resTitle">Подходит всем вашим детям</h2>
+  <p id="resCount"></p>
+</div>
+<div class="grid" id="grid" aria-live="polite"></div>
+
+<section class="band" id="how">
+  <h2>Как это работает</h2>
+  <div class="steps">
+    <div class="step"><h3>Отметьте, кто идёт</h3><p>Возраст каждого ребёнка, бабушка с дедушкой, коляска, доступная среда. Сервис покажет места, где интересно будет всем сразу.</p></div>
+    <div class="step"><h3>Выберите место</h3><p>В карточке — для какого возраста программа, сколько длится, можно ли с коляской, есть ли доступная среда, где пеленальный столик, какие льготы.</p></div>
+    <div class="step"><h3>Получите маршрут дня</h3><p>Место, кафе с детским меню рядом и дорога — одним планом. Остаётся купить билеты и выйти из дома.</p></div>
+  </div>
+</section>
+
+<section class="band" id="partners">
+  <div class="partners">
+    <div>
+      <h2>Для музеев, театров и площадок</h2>
+      <p>«Всей семьёй» — бесплатный сервис АНО «Я-ДАР» для семей с детьми. Мы помогаем семьям найти вас и прийти подготовленными: знать, подойдёт ли программа детям и что ждёт на месте.</p>
+      <p>Проект готовится к подаче в Президентский фонд культурных инициатив по направлению «Крепкая семья».</p>
+    </div>
+    <ul>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg><div><b>Бесплатная карточка площадки</b><span>Описание, условия для семей и ссылка на ваш сайт, проверенные вместе с вами.</span></div></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg><div><b>Семьи, которым вы подходите</b><span>Сервис показывает вас тем, чьим детям программа подходит по возрасту.</span></div></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg><div><b>Видно, сколько семей пришло</b><span>Переходы на сайт с меткой и кодовое слово «Всей семьёй» на входе.</span></div></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg><div><b>Без затрат</b><span>Билеты семьи покупают у вас на общих основаниях.</span></div></li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span>Всей семьёй · АНО «Я-ДАР» · всей-семьёй.рф</span>
+  <span>Прототип, ноябрь 2026. Данные демонстрационные.</span>
+</footer>
+</div>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <div class="dlg-head" id="dlgHead">
+    <button class="x" id="dlgClose" aria-label="Закрыть">×</button>
+    <h2 id="dlgTitle"></h2>
+    <p id="dlgSub"></p>
+  </div>
+  <div class="dlg-body" id="dlgBody"></div>
+</dialog>
+
+<script>
+const GROUPS=[[0,3],[3,6],[7,9],[10,14]];
+const CAT={museum:"Музей",theatre:"Театр",program:"Семейная программа"};
+const WASH={museum:["--wash-sky","--wash-lilac"],theatre:["--wash-peach","--wash-sun"],program:["--wash-mint","--wash-sun"]};
+const V=[
+ {id:"zoo",name:"Зоологический музей",cat:"museum",min:0,max:14,dur:"1,5–2 часа",price:"взрослые ~600 ₽, дошкольники бесплатно",gen:true,stroller:true,large:true,pushkin:true,
+  desc:"Синий кит, мамонт и тысячи животных со всего света. Малыш смотрит на зверей, школьник читает подписи, бабушка вспоминает своё детство.",
+  cond:["можно с коляской, есть гардероб для колясок","пеленальный столик","скамейки в залах — можно передохнуть","лифт: уточняется"],addr:"Университетская наб., 1",
+  cafes:[["Семейное кафе","детское меню, стульчики",6],["Пекарня-кофейня","выпечка, есть столики",4],["Столовая","горячий обед, недорого",9]]},
+ {id:"puppet",name:"Большой театр кукол",cat:"theatre",min:3,max:9,dur:"45–60 минут",price:"билеты ~700–1200 ₽",gen:true,stroller:false,large:true,pushkin:false,
+  desc:"Утренние кукольные спектакли для дошкольников и младших школьников. Короткие, чтобы досидели все.",
+  cond:["спектакль без антракта, 50 минут","игровая зона в фойе","коляску можно оставить в гардеробе","малышам до 3 лет — только на «бэби-спектакли»","спектакли для детей с ОВЗ — уточняется"],addr:"ул. Некрасова, 10",
+  cafes:[["Кафе-блинная","детские порции",5],["Кофейня","какао и сырники",3],["Пиццерия","большие столы для семьи",7]]},
+ {id:"labyr",name:"ЛабиринтУм",cat:"museum",min:5,max:14,dur:"около 2 часов",price:"~650 ₽ детский, ~550 ₽ взрослый",gen:false,stroller:false,large:true,pushkin:true,
+  desc:"Интерактивный музей науки: всё можно трогать, крутить и запускать. Лучше всего для 7–12 лет.",
+  cond:["экспонаты можно трогать","шумно и много людей в выходные","коляску лучше оставить","научное шоу по расписанию"],addr:"Петровская наб.",
+  cafes:[["Бургерная","детское меню",6],["Кафе-столовая","горячий обед",8],["Кофейня","перекус",4]]},
+ {id:"rail",name:"Музей железных дорог России",cat:"museum",min:0,max:14,dur:"2–3 часа",price:"~600 ₽, есть семейные билеты",gen:true,stroller:true,large:true,pushkin:true,acc:true,
+  desc:"Настоящие паровозы и вагоны, в которые можно зайти. Интересно и трёхлетке, и деду-железнодорожнику.",
+  cond:["можно с коляской, широкие проходы","доступная среда: лифты, пандусы, проедет инвалидная коляска","кафе внутри","много места, чтобы побегать"],addr:"у Балтийского вокзала (адрес уточняется)",
+  cafes:[["Кафе в музее","детское меню",1],["Семейное кафе","стульчики, игровой угол",7],["Пекарня","выпечка с собой",5]]},
+ {id:"tuz",name:"ТЮЗ им. Брянцева",cat:"theatre",min:7,max:14,dur:"1,5–2,5 часа",price:"~500–1500 ₽",gen:true,stroller:false,large:true,pushkin:true,
+  desc:"Спектакли по классике для школьников и подростков. Хороший повод сходить вместе со старшими.",
+  cond:["возрастная маркировка у каждого спектакля","антракт, работает буфет","большой гардероб","малышам не подойдёт"],addr:"Пионерская пл., 1",
+  cafes:[["Кафе у метро","обеды",4],["Кофейня","десерты",3],["Пиццерия","на всю семью",6]]},
+ {id:"planet",name:"Планетарий №1",cat:"program",min:5,max:14,dur:"около 1 часа",price:"~700–1500 ₽",gen:true,stroller:false,large:false,pushkin:true,
+  desc:"Программы под куполом: звёзды, планеты и путешествия по космосу. Для дошкольников — отдельные сеансы.",
+  cond:["сеанс 45–60 минут в темноте","детские программы от 5 лет","гардероб","коляску лучше оставить"],addr:"наб. Обводного канала, 74",
+  cafes:[["Кафе в лофте","детское меню",2],["Фудкорт","много мест",3],["Кофейня","перекус",4]]},
+ {id:"herm",name:"Эрмитаж: семейная программа",cat:"program",min:6,max:14,dur:"1,5 часа",price:"по билету в музей, детям вход бесплатный",gen:true,stroller:true,large:true,pushkin:true,acc:true,
+  desc:"Семейные занятия и квесты по залам: дети ищут сюжеты на картинах, взрослые слушают вместе с ними.",
+  cond:["нужна предварительная запись","группы до 15 человек","коляски — по правилам музея","доступная среда: лифты; инклюзивные занятия — уточняются"],addr:"Дворцовая пл., 2",
+  cafes:[["Кафе в музее","перекус",1],["Семейное кафе","детское меню",8],["Блинная","быстро и недорого",6]]},
+ {id:"toys",name:"Мастерская ёлочной игрушки",cat:"program",min:4,max:14,dur:"1,5 часа",price:"~900 ₽ за участника",gen:true,stroller:false,large:false,pushkin:false,
+  desc:"Расписываем стеклянные шары и забираем их домой. Бабушки и дедушки рисуют наравне с детьми.",
+  cond:["все материалы выдают","фартуки на месте","запись заранее","для детей 4+"],addr:"адрес уточняется",
+  cafes:[["Чайная","пироги",5],["Кофейня","какао",3],["Столовая","обед",7]]},
+];
+const S={ages:new Set([0,2]),needs:new Set(["stroller"]),cat:"all",q:""};
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function fits(v){
+  for(const g of S.ages){const [a,b]=GROUPS[g]; if(v.max<a||v.min>b) return false;}
+  if(S.needs.has("gen")&&!v.gen) return false;
+  if(S.needs.has("stroller")&&!v.stroller) return false;
+  if(S.needs.has("large")&&!v.large) return false;
+  if(S.needs.has("pushkin")&&!v.pushkin) return false;
+  if(S.needs.has("acc")&&!v.acc) return false;
+  if(S.cat!=="all"&&v.cat!==S.cat) return false;
+  const q=S.q.trim().toLowerCase(); if(q&&!(v.name+" "+v.desc).toLowerCase().includes(q)) return false;
+  return true;
+}
+function ageBar(v){
+  const l=v.min/14*100,w=(v.max-v.min)/14*100;
+  const kids=[...S.ages].map(g=>{const m=(GROUPS[g][0]+GROUPS[g][1])/2;return `<span class="kid" style="left:calc(${m/14*100}% - 2px)" title="ваш ребёнок"></span>`}).join("");
+  return `<div class="agebar" aria-label="Возраст: от ${v.min} до ${v.max} лет"><div class="track"><span class="fill" style="left:${l}%;width:${w}%"></span>${kids}</div><div class="scale"><span>0</span><span>3</span><span>7</span><span>10</span><span>14 лет</span></div></div>`;
+}
+function badges(v){
+  const b=[];
+  if(v.gen)b.push('<span class="badge gen">с бабушкой и дедушкой</span>');
+  if(v.stroller)b.push('<span class="badge ok">можно с коляской</span>');
+  if(v.large)b.push('<span class="badge">льготы многодетным</span>');
+  if(v.pushkin)b.push('<span class="badge pk">«Пушкинская карта» 14+</span>');
+  if(v.acc)b.push('<span class="badge acc">доступная среда</span>');
+  return b.join("");
+}
+function blots(v){const w=WASH[v.cat];return `<span class="blot" style="background:var(${w[0]})"></span><span class="blot b2" style="background:var(${w[1]})"></span>`}
+function render(){
+  const list=V.filter(fits), g=$("#grid");
+  $("#resCount").textContent=list.length?`${list.length} ${list.length===1?"место":list.length<5?"места":"мест"} · нажмите на карточку, чтобы получить маршрут дня`:"";
+  $("#resTitle").textContent=S.ages.size>1?"Подходит всем вашим детям":"Подходит вашему ребёнку";
+  if(!list.length){g.innerHTML='<div class="empty"><h3>Такого места пока нет</h3><p>Снимите одно из условий — например, «Берём коляску» — или выберите другую категорию.</p></div>';return;}
+  g.innerHTML=list.map(v=>`<button type="button" class="card" data-id="${v.id}">
+    <div class="card-top">${blots(v)}<span class="cat">${CAT[v.cat]} · ${esc(v.dur)}</span><h3>${esc(v.name)}</h3></div>
+    <div class="card-body">${ageBar(v)}<div class="badges">${badges(v)}</div>
+    <div class="card-foot"><b>${esc(v.price.split(",")[0])}</b><span>Маршрут дня →</span></div></div></button>`).join("");
+}
+const ICO={
+ place:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/></svg>',
+ food:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v8a2 2 0 0 0 2 2v8M11 3v8M3 3v8a2 2 0 0 0 2 2M17 3c-2 0-3 3-3 6s1 4 3 4v8"/></svg>',
+ road:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>'};
+function openPlan(v){
+  $("#dlgTitle").textContent=v.name;
+  $("#dlgSub").textContent=`${CAT[v.cat]} · для детей ${v.min}–${v.max} лет · ${v.dur}`;
+  const old=$("#dlgHead").querySelectorAll(".blot");old.forEach(n=>n.remove());
+  $("#dlgHead").insertAdjacentHTML("afterbegin",blots(v));
+  const maps="https://yandex.ru/maps/?mode=routes&rtext=~"+encodeURIComponent("Санкт-Петербург, "+v.name);
+  $("#dlgBody").innerHTML=`
+   <div class="leg"><div class="leg-ico">${ICO.place}</div><div><span class="time">11:00 · ${esc(v.dur)}</span><h3>${esc(v.name)}</h3><p style="margin:4px 0 0">${esc(v.desc)}</p>
+     <ul class="checks">${v.cond.map(c=>`<li${/уточня|только|не подойдёт|лучше оставить/.test(c)?' class="no"':''}>${esc(c)}</li>`).join("")}</ul>
+     <div class="badges" style="margin-top:8px">${badges(v)}</div>
+     <p style="margin:8px 0 0;font-size:14px"><b>Цена:</b> ${esc(v.price)}</p>
+     <span class="verified">Условия проверены вместе с площадкой (в прототипе — пример)</span></div></div>
+   <div class="leg"><div class="leg-ico">${ICO.food}</div><div><span class="time">после программы</span><h3>Где поесть рядом</h3>
+     <div class="cafes">${v.cafes.map(c=>`<div class="cafe"><div><b>${esc(c[0])}</b><small>${esc(c[1])}</small></div><span class="min">${c[2]} мин пешком</span></div>`).join("")}</div></div></div>
+   <div class="leg"><div class="leg-ico">${ICO.road}</div><div><span class="time">дорога</span><h3>Как добраться</h3><p style="margin:4px 0 0;color:var(--ink-2)">${esc(v.addr)}</p>
+     <div class="actions"><a class="btn primary" href="${maps}" target="_blank" rel="noopener">Проложить маршрут</a><a class="btn ghost" href="https://yandex.ru/search/?text=${encodeURIComponent(v.name+" Санкт-Петербург")}" target="_blank" rel="noopener">Сайт площадки</a></div>
+     <p class="hint" style="margin-top:8px">На входе можно сказать «Всей семьёй» — так площадка узнает, что вы пришли через сервис.</p></div></div>`;
+  $("#dlg").showModal();
+}
+function toggleGroup(sel,attr,set){
+  document.querySelectorAll(sel+" .chip").forEach(b=>b.addEventListener("click",()=>{
+    const k=b.dataset[attr], key=attr==="age"?+k:k;
+    if(set.has(key)){ if(attr==="age"&&set.size===1) return; set.delete(key);} else set.add(key);
+    b.setAttribute("aria-pressed",set.has(key)); render();
+  }));
+}
+toggleGroup("#ages","age",S.ages); toggleGroup("#needs","need",S.needs);
+document.querySelectorAll("#cats .chip").forEach(b=>b.addEventListener("click",()=>{
+  S.cat=b.dataset.cat; document.querySelectorAll("#cats .chip").forEach(x=>x.setAttribute("aria-pressed",x===b)); render();}));
+$("#q").addEventListener("input",e=>{S.q=e.target.value;render();});
+$("#grid").addEventListener("click",e=>{const c=e.target.closest(".card"); if(c) openPlan(V.find(v=>v.id===c.dataset.id));});
+$("#dlgClose").addEventListener("click",()=>$("#dlg").close());
+$("#dlg").addEventListener("click",e=>{if(e.target.id==="dlg")$("#dlg").close();});
+render();
+</script>
+</body></html>
