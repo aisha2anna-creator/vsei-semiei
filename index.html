@@ -1,4 +1,5 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Всей семьёй — прототип</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -161,7 +162,6 @@ dialog::backdrop{background:rgba(40,25,15,.45);backdrop-filter:blur(3px)}
   nav.top-nav a.hide-sm{display:none}
 }
 </style>
-</head><body>
 
 <div class="washes" aria-hidden="true"><div class="wash w1"></div><div class="wash w2"></div><div class="wash w3"></div><div class="wash w4"></div><div class="grain"></div></div>
 
@@ -275,31 +275,31 @@ const GROUPS=[[0,3],[3,6],[7,9],[10,14]];
 const CAT={museum:"Музей",theatre:"Театр",program:"Семейная программа"};
 const WASH={museum:["--wash-sky","--wash-lilac"],theatre:["--wash-peach","--wash-sun"],program:["--wash-mint","--wash-sun"]};
 const V=[
- {id:"zoo",name:"Зоологический музей",cat:"museum",min:0,max:14,dur:"1,5–2 часа",price:"взрослые ~600 ₽, дошкольники бесплатно",gen:true,stroller:true,large:true,pushkin:true,
+ {id:"zoo",ll:"59.943690,30.305840",name:"Зоологический музей",cat:"museum",min:0,max:14,dur:"1,5–2 часа",price:"взрослые ~600 ₽, дошкольники бесплатно",gen:true,stroller:true,large:true,pushkin:true,
   desc:"Синий кит, мамонт и тысячи животных со всего света. Малыш смотрит на зверей, школьник читает подписи, бабушка вспоминает своё детство.",
   cond:["можно с коляской, есть гардероб для колясок","пеленальный столик","скамейки в залах — можно передохнуть","лифт: уточняется"],addr:"Университетская наб., 1",
   cafes:[["Семейное кафе","детское меню, стульчики",6],["Пекарня-кофейня","выпечка, есть столики",4],["Столовая","горячий обед, недорого",9]]},
- {id:"puppet",name:"Большой театр кукол",cat:"theatre",min:3,max:9,dur:"45–60 минут",price:"билеты ~700–1200 ₽",gen:true,stroller:false,large:true,pushkin:false,
+ {id:"puppet",ll:"59.939450,30.357920",name:"Большой театр кукол",cat:"theatre",min:3,max:9,dur:"45–60 минут",price:"билеты ~700–1200 ₽",gen:true,stroller:false,large:true,pushkin:false,
   desc:"Утренние кукольные спектакли для дошкольников и младших школьников. Короткие, чтобы досидели все.",
   cond:["спектакль без антракта, 50 минут","игровая зона в фойе","коляску можно оставить в гардеробе","малышам до 3 лет — только на «бэби-спектакли»","спектакли для детей с ОВЗ — уточняется"],addr:"ул. Некрасова, 10",
   cafes:[["Кафе-блинная","детские порции",5],["Кофейня","какао и сырники",3],["Пиццерия","большие столы для семьи",7]]},
- {id:"labyr",name:"ЛабиринтУм",cat:"museum",min:5,max:14,dur:"около 2 часов",price:"~650 ₽ детский, ~550 ₽ взрослый",gen:false,stroller:false,large:true,pushkin:true,
+ {id:"labyr",ll:"59.953000,30.332000",name:"ЛабиринтУм",cat:"museum",min:5,max:14,dur:"около 2 часов",price:"~650 ₽ детский, ~550 ₽ взрослый",gen:false,stroller:false,large:true,pushkin:true,
   desc:"Интерактивный музей науки: всё можно трогать, крутить и запускать. Лучше всего для 7–12 лет.",
   cond:["экспонаты можно трогать","шумно и много людей в выходные","коляску лучше оставить","научное шоу по расписанию"],addr:"Петровская наб.",
   cafes:[["Бургерная","детское меню",6],["Кафе-столовая","горячий обед",8],["Кофейня","перекус",4]]},
- {id:"rail",name:"Музей железных дорог России",cat:"museum",min:0,max:14,dur:"2–3 часа",price:"~600 ₽, есть семейные билеты",gen:true,stroller:true,large:true,pushkin:true,acc:true,
+ {id:"rail",ll:"59.907900,30.299000",name:"Музей железных дорог России",cat:"museum",min:0,max:14,dur:"2–3 часа",price:"~600 ₽, есть семейные билеты",gen:true,stroller:true,large:true,pushkin:true,acc:true,
   desc:"Настоящие паровозы и вагоны, в которые можно зайти. Интересно и трёхлетке, и деду-железнодорожнику.",
   cond:["можно с коляской, широкие проходы","доступная среда: лифты, пандусы, проедет инвалидная коляска","кафе внутри","много места, чтобы побегать"],addr:"у Балтийского вокзала (адрес уточняется)",
   cafes:[["Кафе в музее","детское меню",1],["Семейное кафе","стульчики, игровой угол",7],["Пекарня","выпечка с собой",5]]},
- {id:"tuz",name:"ТЮЗ им. Брянцева",cat:"theatre",min:7,max:14,dur:"1,5–2,5 часа",price:"~500–1500 ₽",gen:true,stroller:false,large:true,pushkin:true,
+ {id:"tuz",ll:"59.920300,30.329500",name:"ТЮЗ им. Брянцева",cat:"theatre",min:7,max:14,dur:"1,5–2,5 часа",price:"~500–1500 ₽",gen:true,stroller:false,large:true,pushkin:true,
   desc:"Спектакли по классике для школьников и подростков. Хороший повод сходить вместе со старшими.",
   cond:["возрастная маркировка у каждого спектакля","антракт, работает буфет","большой гардероб","малышам не подойдёт"],addr:"Пионерская пл., 1",
   cafes:[["Кафе у метро","обеды",4],["Кофейня","десерты",3],["Пиццерия","на всю семью",6]]},
- {id:"planet",name:"Планетарий №1",cat:"program",min:5,max:14,dur:"около 1 часа",price:"~700–1500 ₽",gen:true,stroller:false,large:false,pushkin:true,
+ {id:"planet",ll:"59.914400,30.348800",name:"Планетарий №1",cat:"program",min:5,max:14,dur:"около 1 часа",price:"~700–1500 ₽",gen:true,stroller:false,large:false,pushkin:true,
   desc:"Программы под куполом: звёзды, планеты и путешествия по космосу. Для дошкольников — отдельные сеансы.",
   cond:["сеанс 45–60 минут в темноте","детские программы от 5 лет","гардероб","коляску лучше оставить"],addr:"наб. Обводного канала, 74",
   cafes:[["Кафе в лофте","детское меню",2],["Фудкорт","много мест",3],["Кофейня","перекус",4]]},
- {id:"herm",name:"Эрмитаж: семейная программа",cat:"program",min:6,max:14,dur:"1,5 часа",price:"по билету в музей, детям вход бесплатный",gen:true,stroller:true,large:true,pushkin:true,acc:true,
+ {id:"herm",ll:"59.939800,30.314600",name:"Эрмитаж: семейная программа",cat:"program",min:6,max:14,dur:"1,5 часа",price:"по билету в музей, детям вход бесплатный",gen:true,stroller:true,large:true,pushkin:true,acc:true,
   desc:"Семейные занятия и квесты по залам: дети ищут сюжеты на картинах, взрослые слушают вместе с ними.",
   cond:["нужна предварительная запись","группы до 15 человек","коляски — по правилам музея","доступная среда: лифты; инклюзивные занятия — уточняются"],addr:"Дворцовая пл., 2",
   cafes:[["Кафе в музее","перекус",1],["Семейное кафе","детское меню",8],["Блинная","быстро и недорого",6]]},
@@ -356,7 +356,7 @@ function openPlan(v){
   $("#dlgSub").textContent=`${CAT[v.cat]} · для детей ${v.min}–${v.max} лет · ${v.dur}`;
   const old=$("#dlgHead").querySelectorAll(".blot");old.forEach(n=>n.remove());
   $("#dlgHead").insertAdjacentHTML("afterbegin",blots(v));
-  const maps="https://yandex.ru/maps/?mode=routes&rtext=~"+encodeURIComponent("Санкт-Петербург, "+v.name);
+  const maps=v.ll?"https://yandex.ru/maps/?rtext=~"+v.ll+"&rtt=mt":"https://yandex.ru/maps/?text="+encodeURIComponent("Санкт-Петербург, "+v.name);
   $("#dlgBody").innerHTML=`
    <div class="leg"><div class="leg-ico">${ICO.place}</div><div><span class="time">11:00 · ${esc(v.dur)}</span><h3>${esc(v.name)}</h3><p style="margin:4px 0 0">${esc(v.desc)}</p>
      <ul class="checks">${v.cond.map(c=>`<li${/уточня|только|не подойдёт|лучше оставить/.test(c)?' class="no"':''}>${esc(c)}</li>`).join("")}</ul>
@@ -386,4 +386,5 @@ $("#dlgClose").addEventListener("click",()=>$("#dlg").close());
 $("#dlg").addEventListener("click",e=>{if(e.target.id==="dlg")$("#dlg").close();});
 render();
 </script>
+
 </body></html>
